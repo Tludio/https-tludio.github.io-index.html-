@@ -1,0 +1,62 @@
+document.createElement('div');
+                ball.className = 'number-ball main-ball text-sm sm:text-base';
+                ball.textContent = n;
+                row.appendChild(ball);
+            });
+            const specialBall = document.createElement('div');
+            specialBall.className = `number-ball ${specialClass} text-sm sm:text-base`;
+            specialBall.textContent = specialNumber;
+            row.appendChild(specialBall);
+            return row;
+        }
+
+        // === Historical Data Analysis ===
+        
+        /**
+         * Parses a string of semicolon-separated numbers.
+         */
+        function parsePastedData(textData, requiredLength) {
+            if (!textData || !textData.trim()) return [];
+            return textData.split(';')
+                .map(s => s.trim())
+                .filter(s => s.length === requiredLength && !isNaN(s));
+        }
+
+        /**
+         * Handles the analysis of pasted historical data.
+         */
+        function analyzeHistoricalData() {
+            historicalError.textContent = '';
+            let errorMessages = [];
+
+            // --- Pick 3 Analysis ---
+            const pick3Text = pastedPick3Input.value;
+            const historicalPick3 = parsePastedData(pick3Text, 3);
+            if (pick3Text.trim() && historicalPick3.length === 0) {
+                 errorMessages.push('No valid 3-digit numbers found in the Pick 3 input.');
+            }
+            const pick3Analysis = analyzeDigits(historicalPick3);
+            displayAnalysis(pick3Analysis, historicalPick3Analysis, historicalPick3.join('').length, true);
+
+            // --- Pick 4 Analysis ---
+            const pick4Text = pastedPick4Input.value;
+            const historicalPick4 = parsePastedData(pick4Text, 4);
+             if (pick4Text.trim() && historicalPick4.length === 0) {
+                 errorMessages.push('No valid 4-digit numbers found in the Pick 4 input.');
+            }
+            const pick4Analysis = analyzeDigits(historicalPick4);
+            displayAnalysis(pick4Analysis, historicalPick4Analysis, historicalPick4.join('').length, true);
+            
+            if (errorMessages.length > 0) {
+                historicalError.innerHTML = errorMessages.join('<br>');
+            }
+        }
+
+
+        // === Event Listeners ===
+        generateBtn.addEventListener('click', generateAndDisplayNumbers);
+        analyzeHistoricalBtn.addEventListener('click', analyzeHistoricalData);
+        window.addEventListener('load', generateAndDisplayNumbers);
+    </script>
+</body>
+</html>
